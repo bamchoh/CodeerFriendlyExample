@@ -73,6 +73,7 @@
     <Compile Include="Class1.cs" />
     <Compile Include="Interface1.cs" />
     <Compile Include="OriginalClass.cs" />
+    <Compile Include="SecureStringClass.cs" />
     <Compile Include="SplashWindow.xaml.cs">
       <DependentUpon>SplashWindow.xaml</DependentUpon>
     </Compile>

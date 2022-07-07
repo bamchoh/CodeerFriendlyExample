@@ -99,6 +99,16 @@ namespace CodeerFriendlyExampleTest
             Assert.AreEqual("HogeHoge", (string)mainWindow.Dynamic().text3.Text);
         }
 
+        [TestMethod]
+        public void TestMethod4()
+        {
+            var mainWindow = _app.WaitForIdentifyFromTypeFullName("CodeerFriendlyExample.MainWindow");
+            Assert.AreEqual(true, (bool)mainWindow.Dynamic().SecureString.HasPassword);
+            var secStr = mainWindow.Dynamic().SecureString.Password;
+            var marshalClass = _app.Type("System.Runtime.InteropServices.Marshal");
+            Assert.AreEqual("Password", (string)marshalClass.PtrToStringUni(marshalClass.SecureStringToGlobalAllocUnicode(secStr)));
+        }
+
         void OnMouseLeftButtonDown(dynamic uielement)
         {
             var args = _app.Type().System.Windows.Input.MouseButtonEventArgs(

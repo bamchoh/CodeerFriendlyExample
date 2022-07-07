@@ -22,11 +22,15 @@ namespace CodeerFriendlyExample
     {
         public OriginalClass OriginalClass { get; set; }
 
+        public SecureStringClass SecureString {get; set; }
+
         public MainWindow()
         {
             InitializeComponent();
 
             OriginalClass = new OriginalClass("Test3");
+
+            SecureString = new SecureStringClass("Password");
         }
 
         private void text_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
