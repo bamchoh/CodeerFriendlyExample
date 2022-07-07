@@ -24,5 +24,10 @@ namespace CodeerFriendlyExample
         {
             InitializeComponent();
         }
+
+        private void text_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            text2.Text = "Clicked!!";
+        }
     }
 }

@@ -8,6 +8,7 @@
         Title="MainWindow" Height="450" Width="800">
     <StackPanel>
         <TextBox Text="0" />
-        <TextBlock x:Name="text" Text="TEST" />
+        <TextBlock x:Name="text" Text="TEST" MouseLeftButtonDown="text_MouseLeftButtonDown" />
+        <TextBlock x:Name="text2" Text="TEST2" />
     </StackPanel>
 </Window>

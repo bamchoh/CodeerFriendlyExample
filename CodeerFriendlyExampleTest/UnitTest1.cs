@@ -6,6 +6,7 @@ using System.Threading;
 using Codeer.Friendly.Windows;
 using Codeer.Friendly.Dynamic;
 using Codeer.Friendly.Windows.Grasp;
+using RM.Friendly.WPFStandardControls;
 using CodeerFriendlyExample;
 using Unity;
 
@@ -67,6 +68,31 @@ namespace CodeerFriendlyExampleTest
 
             Assert.AreEqual(30, (int)impl.Value);
         }
+
+        [TestMethod]
+        public void TestMethod2()
+        {
+            var mainWindow = _app.WaitForIdentifyFromTypeFullName("CodeerFriendlyExample.MainWindow");
+            Assert.AreEqual("TEST2", (string)mainWindow.Dynamic().text2.Text);
+
+            OnMouseLeftButtonDown(mainWindow.Dynamic().text);
+
+            Assert.AreEqual("Clicked!!", (string)mainWindow.Dynamic().text2.Text);
+        }
+
+        void OnMouseLeftButtonDown(dynamic uielement)
+        {
+            var args = _app.Type().System.Windows.Input.MouseButtonEventArgs(
+                _app.Type("System.Windows.Input.Mouse").PrimaryDevice,
+                0,
+                _app.Type("System.Windows.Input.MouseButton").Left);
+
+            args.RoutedEvent = _app.Type("System.Windows.Input.Mouse").MouseDownEvent;
+            args.Source = uielement;
+
+            uielement.RaiseEvent(args);
+        }
+
 
         static Interface1 GetInterface1Container(dynamic container)
         {
