@@ -17,6 +17,12 @@ namespace CodeerFriendlyExampleTest
     {
         WindowsAppFriend _app;
 
+        [ClassInitialize]
+        public static void ClassInitialize(TestContext context)
+        {
+            Console.WriteLine("ClassInitialize:" + context.TestName);
+        }
+
         [TestInitialize]
         public void TestInitialize()
         {
@@ -36,6 +42,12 @@ namespace CodeerFriendlyExampleTest
             }
 
             _app = new WindowsAppFriend(process);
+        }
+
+        [ClassCleanup]
+        public static void ClassCleanup()
+        {
+            Console.WriteLine("ClassCleanup");
         }
 
         [TestCleanup]
@@ -81,7 +93,9 @@ namespace CodeerFriendlyExampleTest
         }
 
         [TestMethod]
-        public void TestMethod3()
+        [DataRow("HogeHoge")]
+        [DataRow("あいうえお")]
+        public void TestMethod3(string text)
         {
             var mainWindow = _app.WaitForIdentifyFromTypeFullName("CodeerFriendlyExample.MainWindow");
             Assert.AreEqual("TEST3", (string)mainWindow.Dynamic().text3.Text);
@@ -90,13 +104,13 @@ namespace CodeerFriendlyExampleTest
 
             Assert.AreEqual("Test3", (string)mainWindow.Dynamic().text3.Text);
 
-            var originalClass = _app.Type().CodeerFriendlyExample.OriginalClass("HogeHoge");
+            var originalClass = _app.Type().CodeerFriendlyExample.OriginalClass(text);
 
             mainWindow.Dynamic().OriginalClass = originalClass;
 
             OnMouseLeftButtonDown(mainWindow.Dynamic().text3);
 
-            Assert.AreEqual("HogeHoge", (string)mainWindow.Dynamic().text3.Text);
+            Assert.AreEqual(text, (string)mainWindow.Dynamic().text3.Text);
         }
 
         [TestMethod]
