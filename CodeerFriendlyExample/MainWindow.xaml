@@ -10,5 +10,6 @@
         <TextBox Text="0" />
         <TextBlock x:Name="text" Text="TEST" MouseLeftButtonDown="text_MouseLeftButtonDown" />
         <TextBlock x:Name="text2" Text="TEST2" />
+        <TextBlock x:Name="text3" Text="TEST3" MouseLeftButtonDown="text3_MouseLeftButtonDown" />
     </StackPanel>
 </Window>

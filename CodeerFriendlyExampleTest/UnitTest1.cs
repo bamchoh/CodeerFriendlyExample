@@ -80,6 +80,25 @@ namespace CodeerFriendlyExampleTest
             Assert.AreEqual("Clicked!!", (string)mainWindow.Dynamic().text2.Text);
         }
 
+        [TestMethod]
+        public void TestMethod3()
+        {
+            var mainWindow = _app.WaitForIdentifyFromTypeFullName("CodeerFriendlyExample.MainWindow");
+            Assert.AreEqual("TEST3", (string)mainWindow.Dynamic().text3.Text);
+
+            OnMouseLeftButtonDown(mainWindow.Dynamic().text3);
+
+            Assert.AreEqual("Test3", (string)mainWindow.Dynamic().text3.Text);
+
+            var originalClass = _app.Type().CodeerFriendlyExample.OriginalClass("HogeHoge");
+
+            mainWindow.Dynamic().OriginalClass = originalClass;
+
+            OnMouseLeftButtonDown(mainWindow.Dynamic().text3);
+
+            Assert.AreEqual("HogeHoge", (string)mainWindow.Dynamic().text3.Text);
+        }
+
         void OnMouseLeftButtonDown(dynamic uielement)
         {
             var args = _app.Type().System.Windows.Input.MouseButtonEventArgs(
@@ -92,7 +111,6 @@ namespace CodeerFriendlyExampleTest
 
             uielement.RaiseEvent(args);
         }
-
 
         static Interface1 GetInterface1Container(dynamic container)
         {

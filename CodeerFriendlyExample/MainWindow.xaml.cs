@@ -20,14 +20,23 @@ namespace CodeerFriendlyExample
     /// </summary>
     public partial class MainWindow : Window
     {
+        public OriginalClass OriginalClass { get; set; }
+
         public MainWindow()
         {
             InitializeComponent();
+
+            OriginalClass = new OriginalClass("Test3");
         }
 
         private void text_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             text2.Text = "Clicked!!";
+        }
+
+        private void text3_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            text3.Text = OriginalClass.OriginalName;
         }
     }
 }
