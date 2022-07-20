@@ -123,6 +123,34 @@ namespace CodeerFriendlyExampleTest
             Assert.AreEqual("Password", (string)marshalClass.PtrToStringUni(marshalClass.SecureStringToGlobalAllocUnicode(secStr)));
         }
 
+        [TestMethod]
+        public void TestMethod5()
+        {
+            var domain = _app.Type().System.AppDomain.CurrentDomain;
+
+            Type t = null;
+            foreach (var asm in domain.GetAssemblies())
+            {
+                var typeString = "CodeerFriendlyExample.Interface1";
+                var assemblyString = asm.FullName;
+
+                // 参照しているアセンブリのどこかにある型を探してタイプを取得する。
+                // アセンブリが間違っていると null となる
+                t = Type.GetType(string.Format("{0}, {1}", typeString, assemblyString));
+
+                if (t != null)
+                    break;
+            }
+
+            var app = _app.Type().System.Windows.Application.Current;
+
+            var impl = _app.Type().Unity.UnityContainerExtensions.Resolve(app.Container, t, null);
+
+            impl.Add(10, 20);
+
+            Assert.AreEqual(30, (int)impl.Value);
+        }
+
         void OnMouseLeftButtonDown(dynamic uielement)
         {
             var args = _app.Type().System.Windows.Input.MouseButtonEventArgs(
