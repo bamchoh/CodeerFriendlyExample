@@ -126,21 +126,7 @@ namespace CodeerFriendlyExampleTest
         [TestMethod]
         public void TestMethod5()
         {
-            var domain = _app.Type().System.AppDomain.CurrentDomain;
-
-            Type t = null;
-            foreach (var asm in domain.GetAssemblies())
-            {
-                var typeString = "CodeerFriendlyExample.Interface1";
-                var assemblyString = asm.FullName;
-
-                // 参照しているアセンブリのどこかにある型を探してタイプを取得する。
-                // アセンブリが間違っていると null となる
-                t = Type.GetType(string.Format("{0}, {1}", typeString, assemblyString));
-
-                if (t != null)
-                    break;
-            }
+            var t = GetType("CodeerFriendlyExample.Interface1");
 
             var app = _app.Type().System.Windows.Application.Current;
 
@@ -149,6 +135,24 @@ namespace CodeerFriendlyExampleTest
             impl.Add(10, 20);
 
             Assert.AreEqual(30, (int)impl.Value);
+        }
+
+        [TestMethod]
+        public void TestMethod6()
+        {
+            var t = GetType("CodeerFriendlyExampleInterfaces.ExampleInterface");
+
+            var app = _app.Type().System.Windows.Application.Current;
+
+            var impl = _app.Type().Unity.UnityContainerExtensions.Resolve(app.Container, t, null);
+
+            var result = impl.Do1("test");
+
+            Assert.AreEqual("** test **", (string)result);
+
+            var value = impl.Do2(2);
+
+            Assert.AreEqual(4, (int)value);
         }
 
         void OnMouseLeftButtonDown(dynamic uielement)
@@ -162,6 +166,25 @@ namespace CodeerFriendlyExampleTest
             args.Source = uielement;
 
             uielement.RaiseEvent(args);
+        }
+
+        Type GetType(string typeString)
+        {
+            var domain = _app.Type().System.AppDomain.CurrentDomain;
+
+            Type t = null;
+            foreach (var asm in domain.GetAssemblies())
+            {
+                var assemblyString = asm.FullName;
+
+                // 参照しているアセンブリのどこかにある型を探してタイプを取得する。
+                // アセンブリが間違っていると null となる
+                t = Type.GetType(string.Format("{0}, {1}", typeString, assemblyString));
+
+                if (t != null)
+                    break;
+            }
+            return t;
         }
 
         static Interface1 GetInterface1Container(dynamic container)

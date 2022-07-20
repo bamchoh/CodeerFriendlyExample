@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Threading;
 using Unity;
+using CodeerFriendlyExampleClasses;
+using CodeerFriendlyExampleInterfaces;
 
 namespace CodeerFriendlyExample
 {
@@ -24,6 +26,7 @@ namespace CodeerFriendlyExample
             Container = new UnityContainer();
 
             Container.RegisterType<Interface1, Class1>();
+            Container.RegisterType<ExampleInterface, ExampleClass>();
 
             InterfaceImpl = UnityContainerExtensions.Resolve<Interface1>(Container);
 

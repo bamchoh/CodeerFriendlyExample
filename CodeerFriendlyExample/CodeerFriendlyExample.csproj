@@ -125,5 +125,15 @@
   <ItemGroup>
     <Resource Include="images\splash.bmp" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CodeerFriendlyExampleClasses\CodeerFriendlyExampleClasses.csproj">
+      <Project>{3b75d5c2-b9a6-47f5-9f74-0b673e0e9b21}</Project>
+      <Name>CodeerFriendlyExampleClasses</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CodeerFriendlyExampleInterfaces\CodeerFriendlyExampleInterfaces.csproj">
+      <Project>{2e154c67-08b8-495b-993e-eb1fcdf61198}</Project>
+      <Name>CodeerFriendlyExampleInterfaces</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
