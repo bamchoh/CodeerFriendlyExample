@@ -7,7 +7,6 @@ using Codeer.Friendly.Windows;
 using Codeer.Friendly.Dynamic;
 using Codeer.Friendly.Windows.Grasp;
 using RM.Friendly.WPFStandardControls;
-using CodeerFriendlyExample;
 using Unity;
 
 namespace CodeerFriendlyExampleTest
@@ -126,7 +125,9 @@ namespace CodeerFriendlyExampleTest
         [TestMethod]
         public void TestMethod5()
         {
-            var t = GetType("CodeerFriendlyExample.Interface1");
+            WindowsAppExpander.LoadAssembly(_app, GetType().Assembly);
+
+            var t = _app.Type(GetType()).GetTypeFromProcessAsm("CodeerFriendlyExample.Interface1");
 
             var app = _app.Type().System.Windows.Application.Current;
 
@@ -140,7 +141,9 @@ namespace CodeerFriendlyExampleTest
         [TestMethod]
         public void TestMethod6()
         {
-            var t = GetType("CodeerFriendlyExampleInterfaces.ExampleInterface");
+            _app.LoadAssembly(GetType().Assembly);
+
+            var t = _app.Type(GetType()).GetTypeFromProcessAsm("CodeerFriendlyExampleInterfaces.ExampleInterface");
 
             var app = _app.Type().System.Windows.Application.Current;
 
@@ -153,6 +156,51 @@ namespace CodeerFriendlyExampleTest
             var value = impl.Do2(2);
 
             Assert.AreEqual(4, (int)value);
+
+            var text = impl.Do3("default", 12345);
+
+            Assert.AreEqual("default/12345=0.3",(string)text);
+
+            var obj = _app.Type(GetType()).InvokeGenericMethod(impl, "Do4", "CodeerFriendlyExampleInterfaces.ExampleInterface2");
+
+            Assert.AreEqual("1235", (string)obj.PlusOneString(1234));
+
+            var obj2 = _app.Type(GetType()).InvokeGenericMethod2(impl, "Do5", obj.GetType());
+
+            Assert.AreEqual("1235", (string)obj2.PlusOneString(1234));
+        }
+
+        private static object InvokeGenericMethod(dynamic obj, string method, string typeName)
+        {
+            var t = GetTypeFromProcessAsm(typeName);
+            var mi = obj.GetType().GetMethod(method);
+            var mRef = mi.MakeGenericMethod(t);
+            return mRef.Invoke(obj, null);
+        }
+
+        private static object InvokeGenericMethod2(dynamic obj, string method, dynamic t)
+        {
+            var mi = obj.GetType().GetMethod(method);
+            var mRef = mi.MakeGenericMethod(t);
+            return mRef.Invoke(obj, new object[] { "test", null, 1 });
+        }
+
+        [TestMethod]
+        public void TestMethod7()
+        {
+            WindowsAppExpander.LoadAssembly(_app, GetType().Assembly);
+
+            var t = _app.Type(GetType()).GetTypeFromProcessAsm("CodeerFriendlyExampleInterfaces.ExampleInterface");
+
+            var app = _app.Type().System.Windows.Application.Current;
+
+            var impl = _app.Type().Unity.UnityContainerExtensions.Resolve(app.Container, t, null);
+
+            t = _app.Type(GetType()).GetTypeFromProcessAsm("CodeerFriendlyExampleInterfaces.ExampleInterface2");
+
+            impl = _app.Type().Unity.UnityContainerExtensions.Resolve(impl.Container, t, null);
+
+            Assert.AreEqual(2, (int)impl.PlusOne(1));
         }
 
         void OnMouseLeftButtonDown(dynamic uielement)
@@ -187,9 +235,34 @@ namespace CodeerFriendlyExampleTest
             return t;
         }
 
+        /***
+         * Interface1 は CodeerFriendlyExample に定義が存在する
+         * CodeerFriendlyExample を参照に加えれば使用できるが
+         * 通常、実行するプロセスを参照に加えたくはないので
+         * コメントアウト
+         ***
         static Interface1 GetInterface1Container(dynamic container)
         {
             return UnityContainerExtensions.Resolve<Interface1>(container);
+        }
+        */
+
+        static object GetInterface1Container(dynamic container)
+        {
+            var t = GetTypeFromProcessAsm("CodeerFriendlyExample.Interface1");
+            return UnityContainerExtensions.Resolve(container, t, null);
+        }
+
+        static Type GetTypeFromProcessAsm(string typeString)
+        {
+            foreach (var asm in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                var asmString = asm.FullName;
+                var t = Type.GetType(String.Format("{0}, {1}", typeString, asmString));
+                if (t != null)
+                    return t;
+            }
+            throw new Exception(string.Format("Type was not found: {0}", typeString));
         }
     }
 }
