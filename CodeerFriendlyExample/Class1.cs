@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CodeerFriendlyExample
 {
-    public class Class1 : Interface1
+    internal class Class1 : Interface1
     {
         public int Value { get; set; }
         public string Text { get; set; }

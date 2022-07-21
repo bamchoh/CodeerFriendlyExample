@@ -165,7 +165,7 @@ namespace CodeerFriendlyExampleTest
 
             Assert.AreEqual("1235", (string)obj.PlusOneString(1234));
 
-            var obj2 = _app.Type(GetType()).InvokeGenericMethod2(impl, "Do5", obj.GetType());
+            var obj2 = _app.Type(GetType()).InvokeGenericMethod2(impl, "Do5", obj.GetType(), impl.Container);
 
             Assert.AreEqual("1235", (string)obj2.PlusOneString(1234));
         }
@@ -178,11 +178,11 @@ namespace CodeerFriendlyExampleTest
             return mRef.Invoke(obj, null);
         }
 
-        private static object InvokeGenericMethod2(dynamic obj, string method, dynamic t)
+        private static object InvokeGenericMethod2(dynamic obj, string method, dynamic t, dynamic container)
         {
             var mi = obj.GetType().GetMethod(method);
             var mRef = mi.MakeGenericMethod(t);
-            return mRef.Invoke(obj, new object[] { "test", null, 1 });
+            return mRef.Invoke(obj, new object[] { container, null, 1 });
         }
 
         [TestMethod]

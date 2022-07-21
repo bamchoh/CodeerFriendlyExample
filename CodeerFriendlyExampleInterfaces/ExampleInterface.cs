@@ -12,4 +12,9 @@ namespace CodeerFriendlyExampleInterfaces
 
         int Do2(int value);
     }
+
+    public interface ExampleInterface2
+    {
+        int PlusOne(int value);
+    }
 }
